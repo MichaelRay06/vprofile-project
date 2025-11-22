@@ -20,7 +20,7 @@ pipeline {
         // SonarQube settings
         SONARSERVER = "sonarserver"
         SONARSCANNER = "sonarscanner"
-        SONAR_TOKEN = "vprofile_ID"
+        
     }
 
     stages {
@@ -62,7 +62,7 @@ pipeline {
                           -Dsonar.projectVersion=1.0 \
                           -Dsonar.sources=src \
                           -Dsonar.host.url=http://35.179.103.53 \
-                          -Dsonar.login="${SONAR_TOKEN}" \
+                          -Dsonar.login=vprofile_ID \
                           -Dsonar.java.binaries=target/classes \
                           -Dsonar.junit.reportsPath=target/surefire-reports \
                           -Dsonar.jacoco.reportsPath=target/jacoco.exec \
