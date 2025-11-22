@@ -40,7 +40,7 @@ pipeline {
             }
         }
 
-        stage('Checkstyle Analysis') {
+        stage('Checkstyles Analysis') {
             steps {
                 sh "mvn -s settings.xml checkstyle:checkstyle"
             }
