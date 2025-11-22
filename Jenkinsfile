@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-        stage('Sonars Analysis') {
+        stage('Sonar Analysis') {
             environment {
                 scannerHome = tool "${SONARSCANNER}"
             }
