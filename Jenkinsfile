@@ -16,9 +16,10 @@ pipeline {
         NEXUSPORT = '8081'
         NEXUS_GRP_REPO = 'vprofile-maven-group'
         NEXUS_LOGIN = 'nexus_ID'
+
+        // SonarQube settings
         SONARSERVER = "sonarserver"
         SONARSCANNER = "sonarscanner"
-        
     }
 
     stages {
@@ -37,33 +38,38 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh "mvn -s settings.xml test"
+                sh 'mvn -s settings.xml test'
             }
         }
 
         stage('Checkstyle Analysis') {
             steps {
-                sh "mvn -s settings.xml checkstyle:checkstyle"
+                sh 'mvn -s settings.xml checkstyle:checkstyle'
             }
         }
 
-        stage('Sonars Analysis') {
+        stage('Sonar Analysis') {
             environment {
                 scannerHome = tool "${SONARSCANNER}"
             }
             steps {
                 withSonarQubeEnv("${SONARSERVER}") {
-                    sh '''${scannerHome}/bin/sonar-scanner \
-                    -Dsonar.projectKey=vprofile \
-                    -Dsonar.projectName=vprofile \
-                    -Dsonar.projectVersion=1.0 \
-                    -Dsonar.host.url=http://35.179.103.53 
-                    -Dsonar.login=0a21fcd3cdccb684d608c354ac9f9c2acff66de1 \
-                    -Dsonar.sources=src \
-                    -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                    -Dsonar.junit.reportsPath=target/surefire-reports \
-                    -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                    -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'vprofile_ID')]) {
+
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                          -Dsonar.projectKey=vprofile \
+                          -Dsonar.projectName=vprofile \
+                          -Dsonar.projectVersion=1.0 \
+                          -Dsonar.sources=src \
+                          -Dsonar.host.url=http://35.179.103.53 \
+                          -Dsonar.login=$vprofile_ID \
+                          -Dsonar.java.binaries=target/classes \
+                          -Dsonar.junit.reportsPath=target/surefire-reports \
+                          -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                          -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+                        """
+                    }
                 }
             }
         }
