@@ -18,6 +18,7 @@ pipeline {
         NEXUS_LOGIN = 'nexus_ID'
         SONARSERVER = "sonarserver"
         SONARSCANNER = "sonarscanner"
+        
     }
 
     stages {
@@ -56,6 +57,8 @@ pipeline {
                     -Dsonar.projectKey=vprofile \
                     -Dsonar.projectName=vprofile-ci-pipeline \
                     -Dsonar.projectVersion=1.0 \
+                    -Dsonar.host.url=http://35.179.103.53 \ 
+                    -Dsonar.login=0a21fcd3cdccb684d608c354ac9f9c2acff66de1 \
                     -Dsonar.sources=src/ \
                     -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
                     -Dsonar.junit.reportsPath=target/surefire-reports/ \
