@@ -55,7 +55,7 @@ pipeline {
                 withSonarQubeEnv("${SONARSERVER}") {
                     sh '''${scannerHome}/bin/sonar-scanner \
                     -Dsonar.projectKey=vprofile \
-                    -Dsonar.projectName=vprofile-ci-pipeline \
+                    -Dsonar.projectName=vprofile \
                     -Dsonar.projectVersion=1.0 \
                     -Dsonar.host.url=http://35.179.103.53 
                     -Dsonar.login=0a21fcd3cdccb684d608c354ac9f9c2acff66de1 \
