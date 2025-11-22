@@ -54,7 +54,7 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv("${SONARSERVER}") {
-                    withCredentials([string(credentialsId: variable: 'vprofile_ID')]) {
+                    withCredentials([string(credentialsId: 'vprofile_ID', variable: 'SONAR_TOKEN')]) {
 
                         sh """
                         ${scannerHome}/bin/sonar-scanner \
@@ -63,7 +63,7 @@ pipeline {
                           -Dsonar.projectVersion=1.0 \
                           -Dsonar.sources=src \
                           -Dsonar.host.url=http://35.179.103.53 \
-                          -Dsonar.login=$vprofile_ID \
+                          -Dsonar.login=$SONAR_TOKEN \
                           -Dsonar.java.binaries=target/classes \
                           -Dsonar.junit.reportsPath=target/surefire-reports \
                           -Dsonar.jacoco.reportsPath=target/jacoco.exec \
