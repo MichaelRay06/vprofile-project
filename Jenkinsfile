@@ -59,9 +59,9 @@ pipeline {
                     -Dsonar.projectVersion=1.0 \
                     -Dsonar.host.url=http://35.179.103.53 
                     -Dsonar.login=0a21fcd3cdccb684d608c354ac9f9c2acff66de1 \
-                    -Dsonar.sources=src/ \
+                    -Dsonar.sources=src \
                     -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                    -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                    -Dsonar.junit.reportsPath=target/surefire-reports \
                     -Dsonar.jacoco.reportsPath=target/jacoco.exec \
                     -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
                 }
