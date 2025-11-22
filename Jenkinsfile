@@ -61,7 +61,7 @@ pipeline {
                           -Dsonar.projectName=vprofile \
                           -Dsonar.projectVersion=1.0 \
                           -Dsonar.sources=src \
-                          -Dsonar.host.url=http://35.179.103.53 \
+                          -Dsonar.host.url=http://18.170.57.130 \
                           -Dsonar.login=vprofile_ID \
                           -Dsonar.java.binaries=target/classes \
                           -Dsonar.junit.reportsPath=target/surefire-reports \
