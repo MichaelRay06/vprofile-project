@@ -62,7 +62,7 @@ pipeline {
                           -Dsonar.projectVersion=1.0 \
                           -Dsonar.sources=src \
                           -Dsonar.host.url=http://18.170.57.130 \
-                          -Dsonar.login=vprofile_ID \
+                          -Dsonar.login=0a21fcd3cdccb684d608c354ac9f9c2acff66de1 \
                           -Dsonar.java.binaries=target/classes \
                           -Dsonar.junit.reportsPath=target/surefire-reports \
                           -Dsonar.jacoco.reportsPath=target/jacoco.exec \
