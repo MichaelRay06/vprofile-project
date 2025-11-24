@@ -54,7 +54,7 @@ pipeline {
                    -Dsonar.projectName=vprofile \
                    -Dsonar.projectVersion=1.0 \
                    -Dsonar.sources=src \
-                   -Dsonar.host.url=http://18.170.57.130/sonar \
+                   -Dsonar.host.url=http://35.179.160.133/sonar \
                     -Dsonar.login=$SONAR_TOKEN \
                    -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest \
                    -Dsonar.junit.reportsPath=target/surefire-reports \
