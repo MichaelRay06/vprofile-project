@@ -1,23 +1,20 @@
 pipeline {
     agent any
     tools {
-         maven "MAVEN3.9"
+        maven "MAVEN"
         jdk "JDK17"
 
     }
     
     environment {
-        SNAP_REPO = 'vprofile-snapshot'
-		NEXUS_USER = 'admin'
-		NEXUS_PASS = 'admin123'
-		RELEASE_REPO = 'vprofile-release'
-		CENTRAL_REPO = 'vpro-maven-central'
-		NEXUSIP = '172.31.5.4'
-		NEXUSPORT = '8081'
-		NEXUS_GRP_REPO = 'vpro-maven-group'
-        NEXUS_LOGIN = 'nexuslogin'
-        SONARSERVER = 'sonarserver'
-        SONARSCANNER = 'sonarscanner'
+         SNAP_REPO          = 'vprofile-snapshot'
+        RELEASE_REPO       = 'vprofile-releases'
+        CENTRAL_REPO       = 'vprofile-maven-central'
+        NEXUSIP            = '172.31.14.220'
+        NEXUSPORT          = '8081'
+        NEXUS_GRP_REPO     = 'vprofile-maven-group'
+        SONARSERVER        = "sonarserver"     // Jenkins global Sonar server name
+        SONARSCANNER       = "sonarscanner"    // Jenkins global SonarScanner tool name
     }
 
     stages {
@@ -45,27 +42,25 @@ pipeline {
                 sh 'mvn -s settings.xml checkstyle:checkstyle'
             }
         }
-
-        stage('Sonar Analysis') {
+   stage('Sonar Analysis') {
             environment {
                 scannerHome = tool "${SONARSCANNER}"
             }
             steps {
                withSonarQubeEnv("${SONARSERVER}") {
+                withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
 
-                    withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                                -Dsonar.projectKey=vprofile \
-                                -Dsonar.projectName=vprofile \
-                                -Dsonar.sources=src \
-                                -Dsonar.host.url=http://18.170.57.130/sonar \
-                                -Dsonar.login=$SONAR_TOKEN \
-                                -Dsonar.java.binaries=target/classes \
-                                -Dsonar.junit.reportsPath=target/surefire-reports \
-                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                                -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
-                        """
+                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src \
+                   -Dsonar.host.url=http://18.170.57.130/sonar \
+                    -Dsonar.login=$SONAR_TOKEN \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest \
+                   -Dsonar.junit.reportsPath=target/surefire-reports \
+                   -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml '''
+                }
               }
             }
         }
