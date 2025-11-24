@@ -13,6 +13,7 @@ pipeline {
         NEXUSIP            = '172.31.14.220'
         NEXUSPORT          = '8081'
         NEXUS_GRP_REPO     = 'vprofile-maven-group'
+        NEXUS_LOGIN        = 'nexus_ID'
         SONARSERVER        = "sonarserver"     // Jenkins global Sonar server name
         SONARSCANNER       = "sonarscanner"    // Jenkins global SonarScanner tool name
     }
@@ -42,27 +43,26 @@ pipeline {
                 sh 'mvn -s settings.xml checkstyle:checkstyle'
             }
         }
-   stage('Sonar Analysis') {
-            environment {
-                scannerHome = tool "${SONARSCANNER}"
-            }
-            steps {
-               withSonarQubeEnv("${SONARSERVER}") {
-
-                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
-                   -Dsonar.projectName=vprofile \
-                   -Dsonar.projectVersion=1.0 \
-                   -Dsonar.sources=src/ \
-                   -Dsonar.host.url=http://35.179.160.133/sonar \
-                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                   -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
-                   -Dsonar.web.context=/sonar '''
-                  
-                
-              }
+  
+    }                                                        
+     stage("UploadArtifact"){
+            steps{
+                nexusArtifactUploader(
+                  nexusVersion: 'nexus3',
+                  protocol: 'http',
+                  nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
+                  groupId: 'QA',
+                  version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                  repository: "${RELEASE_REPO}",
+                  credentialsId: "${NEXUS_LOGIN}", 
+                  artifacts: [
+                    [artifactId: 'vproapp',
+                     classifier: '',
+                     file: 'target/vprofile-v2.war',
+                     type: 'war']
+                  ]
+                )
             }
         }
     }
-}
+
