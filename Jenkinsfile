@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
     tools {
@@ -63,5 +64,22 @@ pipeline {
                 )
             }
         }
-    }
-}
+
+        stage('Sonar Analysis') {
+            environment {
+                scannerHome = tool "${SONARSCANNER}"
+            }
+            steps {
+                withSonarQubeEnv("${SONARSERVER}") {
+                    withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.login=$SONAR_TOKEN 
+                                
+                        """
+                    }
+                }
+            }
+        }
+    } // end stages
+} // end pipeline
